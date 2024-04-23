@@ -1,4 +1,4 @@
-package com.learning.designpatterns.creational.abstract_factory;
+package com.learning.designpatterns.creational.abstractfactory;
 
 
 public class ReportDocument implements Document{

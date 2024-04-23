@@ -1,10 +1,10 @@
-package com.learning.designpatterns.creational.abstract_factory;
+package com.learning.designpatterns.creational.abstractfactory;
 
-public class InvoiceFactory implements ContentFactory{
+public class ReportFactory implements ContentFactory{
     @Override
   public Document createDocument(String type) {
-    if (type.equals("INVOICE")) {
-      return new InvoiceDocument();
+    if (type.equals("REPORT")) {
+      return new ReportDocument();
     } else {
       throw new IllegalArgumentException("Invalid document type");
     }
@@ -12,8 +12,8 @@ public class InvoiceFactory implements ContentFactory{
 
   @Override
   public Chart createChart(String type) {
-    if (type.equals("PIE")) {  // Assuming invoices use pie charts
-      return new PieChart();
+    if (type.equals("BAR")) {
+      return new BarChart();
     } else {
       throw new IllegalArgumentException("Invalid chart type");
     }
