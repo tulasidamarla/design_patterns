@@ -15,6 +15,9 @@
     - `OnCommand` and `OffCommand` are concrete implementations.
   - `RemoteControl` is the invoker.
   - `Person` is the client.
+- Here is the UML for the command design pattern.
+
+<img src="../../images/command.png" height=300 width=400>
  
 ```java
 //Receiver
