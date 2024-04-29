@@ -118,6 +118,6 @@ public class Person {
 
 - Difference between command and strategy
   - The Command Design Pattern focuses on encapsulating a request as an object and decoupling the sender of the 
-    request from the receiver. 
+    request from the receiver.
   - The Strategy Design Pattern focuses on defining a family of algorithms, encapsulating each one as an object, 
     and allowing them to be interchanged dynamically.
