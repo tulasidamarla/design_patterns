@@ -54,7 +54,6 @@ class Bank extends Client{
 class Test{
     public static void main(String[] args){
         List<Client> clients = new ArrayList<>();
-        // add all clients
         //send mails to all clients
         client.forEach(Client::sendEmail);
     }
@@ -62,7 +61,8 @@ class Test{
 ```
 - `Drawbacks`
   - Using polymorphism to invoke various clients looks so good. But, the above approach has the following drawbacks.
-    - `Violation of SRP:` Concrete Client classes has started as simple POJO's and started adding functionality. More requirements in the 
+    - `Violation of SRP:` Concrete Client classes has started as simple 
+      POJO's and started adding functionality. More requirements in the 
       future violates this even further. If a change in the functionality is required, we need to change all sub classes code.
 
 - `Solution`
@@ -92,7 +92,7 @@ class InsuranceMessagingVisitor implements Visitor{
     }
 }
 ```
-- The client code to call the above methods as shown below has the below disadvantage especially when the types of clients grow large.
+- The client code to call the above methods as shown below has the below disadvantage especially when the type of clients grow large.
 ```java
 for(Client client: clients){
     if(client instanceOf Bank){
