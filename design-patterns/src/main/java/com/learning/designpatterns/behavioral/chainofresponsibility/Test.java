@@ -1,7 +1,5 @@
 package com.learning.designpatterns.behavioral.chainofresponsibility;
 
-import java.util.logging.Handler;
-
 public class Test {
     public static void main(String[] args) {
         Database db = new Database();
