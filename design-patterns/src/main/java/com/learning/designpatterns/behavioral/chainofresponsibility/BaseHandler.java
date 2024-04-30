@@ -7,14 +7,14 @@ public abstract class BaseHandler{
 
     public BaseHandler setNextHandler(BaseHandler next){
         this.next = next;
-        return next;
+        return this;
     }
 
     public abstract boolean handleRequest(String username, String password);
 
     protected boolean handleNext(String username, String password){
         if (Objects.nonNull(next)){
-            return next.handleNext(username, password);
+            return next.handleRequest(username, password);
         }
         return true;
     }

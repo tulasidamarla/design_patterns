@@ -7,9 +7,9 @@ public class RoleVerificationHandler extends BaseHandler{
         if("admin".equals(username)){
             // Fetch specific permissions related to admin
             System.out.println("Loading admin page");
-            return handleNext(username, password);
+            return true;
         }
         System.out.println("loading home page");
-        return handleNext(username, password);
+        return true;
     }
 }
