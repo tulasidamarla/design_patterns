@@ -240,8 +240,55 @@ public class Main {
 
 ## Example 3
 - A traffic light system functions differently based on its current signal.
-- Here is the sample code.
+- Implementing the traffic light system using brute force.
+```java
+public class TrafficLightBruteForce {
+    private enum State {
+        GREEN, YELLOW, RED
+    }
 
+    private State state;
+    private State previousState;
+
+    public TrafficLightBruteForce() {
+        state = State.GREEN;
+        previousState = State.RED; // Initially, we assume it turned green from red
+    }
+
+    public void change() {
+        if (state == State.GREEN) {
+            System.out.println("Green - Go!");
+            previousState = state;
+            state = State.YELLOW;
+        } else if (state == State.YELLOW) {
+            if (previousState == State.GREEN) {
+                System.out.println("Yellow - Prepare to Stop!");
+                state = State.RED;
+            } else if (previousState == State.RED) {
+                System.out.println("Yellow - Prepare to Go!");
+                state = State.GREEN;
+            }
+        } else if (state == State.RED) {
+            System.out.println("Red - Stop!");
+            previousState = state;
+            state = State.YELLOW;
+        }
+    }
+
+    public static void main(String[] args) {
+        TrafficLightBruteForce trafficLight = new TrafficLightBruteForce();
+        trafficLight.change(); // Green - Go!
+        trafficLight.change(); // Yellow - Prepare to Stop!
+        trafficLight.change(); // Red - Stop!
+        trafficLight.change(); // Yellow - Prepare to Go!
+    }
+}
+```
+- `Drawbacks with above approach`
+  - Each time we want to add a new state, we have to add another if/else statement, which is not only confusing to read but also a nightmare to maintain, especially when we start to add || and && logic to our statements.
+- `Solution`
+  - State design pattern solves the above problem.  
+  - Here is the sample code using state design pattern.
 ```java
 /**
  * State
