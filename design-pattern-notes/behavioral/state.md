@@ -341,3 +341,4 @@ public class Client {
 
 - Here is the UML class diagram for the above.
 
+<img src="../../images/state2.avif" height=300 weight=400>
