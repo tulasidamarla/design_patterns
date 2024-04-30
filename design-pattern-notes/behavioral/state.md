@@ -21,13 +21,13 @@
     clicking on home button and clicking on power button.
   - `Concrete State:` These are classes that implement the State interface and provide specific implementations for the operations based on the state 
     they represent. For ex, OffState(Display off), ReadyState, LockedState and PowerOffState.
-
-    
       
 ```java
+// context
 class Phone{
     private State state;
-    Phone(State state){
+
+    Phone(){
         state = new OffState(this);
     }
 
@@ -35,93 +35,95 @@ class Phone{
         this.state = state;
     }
 
-    Public String lock(){
-        return "Locking phone and turn off the screen";
+    public void pressPowerButton(){
+        state.onPowerButton();
     }
 
-    Public String home(){
-        return "Going to home screen";
-    }
-
-    Public String unlock(){
-        return "Unlocking the phone to home";
-    }
-
-    Public String turnOn(){
-        return "Turning the phone on, device is still locked";
+    public void pressHomeButton(){
+        state.onHome();
     }
 }
 
-abstract class State(){
-    protected Phone phone;
-    public State(Phone phone){
+// state interface or abstract class
+abstract class State{
+        protected Phone phone;
+        public State(Phone phone){
+            this.phone = phone;
+        }
+    
+        abstract void onHome();
+        abstract void onPowerButton();
+}
+
+// concrete state classes
+class OffState extends State{
+    private Phone phone;
+    public OffState(Phone phone){
+        super(phone);
         this.phone = phone;
     }
 
-    abstract String onHome();
-    abstract String onPowerButton();
-}
-
-class OffState extends State{
-    public State(Phone phone){
-        super(phone);
-    }
-
     @Override
-    public String onHome(){
-        phone.setState(new LockedState());
-        return phone.turnOn();
+    public void onHome(){
+        System.out.println("On home screen and locked");
+        phone.setState(new LockedState(phone));
     }
  
     @Override 
-    public String onPowerButton(){
-        phone.setState(new LockedState());
-        return phone.turnOn();
+    public void onPowerButton(){
+        System.out.println("On home screen and locked");
+        phone.setState(new LockedState(phone));
     }
 }
 
 class ReadyState extends State{
-    public State(Phone phone){
+    public ReadyState(Phone phone){
         super(phone);
     }
 
     @Override
-    public String onHome(){
-        return phone.home();
+    public void onHome(){
+        System.out.println("on home screen and ready to use");
     }
  
     @Override 
-    public String onPowerButton(){
-        phone.setState(new OffState());
-        return phone.lock();
+    public void onPowerButton(){
+        System.out.println("In display off and locked state");
+        phone.setState(new OffState(phone));
     }
 }
 
 class LockedState extends State{
-    public State(Phone phone){
+    public LockedState(Phone phone){
         super(phone);
     }
 
     @Override
-    public String onHome(){
-        phone.setState(new ReadyState());
-        return phone.unlock();
+    public void onHome(){
+        System.out.println("on home screen and unlocked state");
+        phone.setState(new ReadyState(phone));
     }
  
     @Override 
-    public String onPowerButton(){
-        phone.setState(new OffState());
-        return phone.lock();
+    public void onPowerButton(){
+        System.out.println("In display off and locked state");
+        phone.setState(new OffState(phone));
     }
 }
 
-// To simulate this behavior, here is the test code.
-public static void main(String[] args){
-    Phone phone = new Phone();
-    JButton home = new JButton("Home");
-    home.addActionListener(e -> phone.state.onHome());
-    JButton power = new JButton("Power");
-    power.addActionListener(e -> phone.state.onPowerButton());
+// Client test class
+public class Test {
+    public static void main(String[] args) {
+        Phone phone = new Phone();
+        phone.pressHomeButton(); //On home screen and locked
+        phone.pressHomeButton(); //on home screen and unlocked state
+        phone.pressPowerButton(); //In display off and locked state
+        phone.pressPowerButton(); //On home screen and locked
+        phone.pressPowerButton(); //In display off and locked state
+        phone.pressHomeButton(); //On home screen and locked
+        phone.pressHomeButton(); //on home screen and unlocked state
+        phone.pressHomeButton(); //on home screen and ready to use
+    }    
 }
 ```
 - Please see the below UML class diagram for state design pattern.
@@ -145,4 +147,197 @@ public static void main(String[] args){
     jump from one state to other.
   - Strategy pattern has multiple strategy implementations, but they all achieve same behavior. For ex, Differnt sorting strategies achieve sorting 
     behavior only, whereas State pattern is all about different behaviors depending on state.
+
+## Example 2
+- A vending machine that dispenses different items based on its current state.
+- We can implement the State Pattern to represent the different states of the vending machine:
+- Here is the code.
+
+```java
+// Context
+class VendingMachine {
+    private State state;
+
+    public VendingMachine() {
+        // Initial state is NoCoinState
+        state = new NoCoinState(this);
+    }
+
+    public void setState(State state) {
+        this.state = state;
+    }
+
+    // Delegate state-specific behavior to the current state object
+    public void insertCoin() {
+        state.insertCoin();
+    }
+
+    public void pressButton() {
+        state.pressButton();
+    }
+
+    // Other methods...
+}
+
+// State interface
+interface State {
+    void insertCoin();
+    void pressButton();
+}
+
+// Concrete state: NoCoinState
+class NoCoinState implements State {
+    private VendingMachine vendingMachine;
+
+    public NoCoinState(VendingMachine vendingMachine) {
+        this.vendingMachine = vendingMachine;
+    }
+
+    @Override
+    public void insertCoin() {
+        System.out.println("Coin inserted.");
+        vendingMachine.setState(new HasCoinState(vendingMachine));
+    }
+
+    @Override
+    public void pressButton() {
+        System.out.println("Please insert a coin first.");
+    }
+}
+
+// Concrete state: HasCoinState
+class HasCoinState implements State {
+    private VendingMachine vendingMachine;
+
+    public HasCoinState(VendingMachine vendingMachine) {
+        this.vendingMachine = vendingMachine;
+    }
+
+    @Override
+    public void insertCoin() {
+        System.out.println("You have already inserted a coin.");
+    }
+
+    @Override
+    public void pressButton() {
+        System.out.println("Item dispensed.");
+        // Change state to NoCoinState after dispensing the item
+        vendingMachine.setState(new NoCoinState(vendingMachine));
+    }
+}
+
+// Client code
+public class Main {
+    public static void main(String[] args) {
+        VendingMachine vendingMachine = new VendingMachine();
+        vendingMachine.pressButton(); // Output: Please insert a coin first.
+
+        vendingMachine.insertCoin(); // Output: Coin inserted.
+        vendingMachine.pressButton(); // Output: Item dispensed.
+    }
+}
+```
+
+## Example 3
+- A traffic light system functions differently based on its current signal.
+- Here is the sample code.
+
+```java
+/**
+ * State
+ */
+interface TrafficLightState {
+  void changeState(TrafficLight trafficLight);
+}
+
+/**
+ * Concrete State
+ */
+class GreenState implements TrafficLightState {
+
+  @Override
+  public void changeState(TrafficLight light) {
+    System.out.println("Green - go!");
+    light.setState(new YellowState());
+  }
+}
+
+
+/**
+ * Concrete State
+ */
+class YellowState implements TrafficLightState {
+
+  @Override
+  public void changeState(TrafficLight light) {
+    if (light.getPrevState() instanceof RedState) {
+      System.out.println("Yellow (from Red to Green) - caution!");
+      light.setState(new GreenState());
+    } else {
+      System.out.println("Yellow (from Green to Red) - caution!");
+      light.setState(new RedState());
+    }
+  }
+}
+
+/**
+ * Concrete State
+ */
+class RedState implements TrafficLightState {
+
+  @Override
+  public void changeState(TrafficLight light) {
+    System.out.println("Red - Stop!");
+    light.setState(new YellowState());
+  }
+}
+
+/**
+ * Context
+ */
+
+class TrafficLight {
+
+  private TrafficLightState state;
+  private TrafficLightState prevState;
+
+  TrafficLight() {
+    this.state = new RedState();
+    this.prevState = null;
+  }
+
+  void setState(TrafficLightState state) {
+    this.prevState = this.state;
+    this.state = state;
+  }
+
+  TrafficLightState getPrevState() {
+    return this.prevState;
+  }
+
+  void change() {
+    this.state.changeState(this);
+  }
+}
+
+/**
+ * Client class
+ */
+public class Client {
+
+  public static void main(String[] args) {
+    TrafficLight lightSystem = new TrafficLight();
+
+    lightSystem.change(); // Red - Stop!
+    lightSystem.change(); // Yellow (from Red to Green) - caution!
+    lightSystem.change(); // Green - go!
+    lightSystem.change(); // Yellow (from Green to Red) - caution!
+    lightSystem.change(); // Red - Stop!
+    lightSystem.change(); // Yellow (from Red to Green) - caution!
+    lightSystem.change(); // Green - go!
+  }
+}
+```
+
+- Here is the UML class diagram for the above.
 
