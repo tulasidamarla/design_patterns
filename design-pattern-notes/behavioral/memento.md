@@ -73,11 +73,16 @@ class TextArea{
         this.text = text;
     }
 
+    public String getContent() {
+        return this.text;
+    }
+
     public Memento takeSnapshot(){
         return new Memento(this.text);
     }
 
     public void restore(Memento memento){
+        System.out.println("Retrieved text from memento is: " + memento.getSavedText());
         this.text = memento.getSavedText();
     }
 
@@ -92,15 +97,15 @@ class TextArea{
         }
 
     }
- }
-
+}
+```
 - `Note:` The memento class has same fields as that of the original class(TextArea) along with getter to retrieve the snapshot that is 
   only accessible from outer class.
 - Memento class is a value object that acts as a snapshot of the original class.
   - It is a common practice to make Memento immutable and pass data only once through constructor.
 - Let's implement the text editor which stores and retrieves the snapshots.
 ```java
-class TextEditor{
+class TextEditor {
     private Deque<Memento> stateHistory;
     private TextArea textArea;
 
@@ -110,12 +115,20 @@ class TextEditor{
     }
 
     public void write(String text){
-        textArea.set(text);
-        stateHistory.add(textArea.takeSnapshot())
+        //System.out.println("Writing text: " + text);
+        textArea.setText(text);
+        stateHistory.add(textArea.takeSnapshot());
     }
 
     public void undo(){
-        textArea.restore(stateHistory.pop());
+        stateHistory.removeLast();
+        Memento memento = stateHistory.getLast();
+        System.out.println("Undoing to previous state...");
+        textArea.restore(memento);
+    }
+
+    public void showContent() {
+        System.out.println("TextEditor: Current Content: " + textArea.getContent());
     }
 }
 
@@ -123,10 +136,14 @@ class Test{
     public static void main(String[] args){
         TextEditor editor = new TextEditor();
         editor.write("Like");
-        editor.write("Like and");
+        editor.showContent(); // TextEditor: Current Content: Like
+        editor.write("Like and"); 
+        editor.showContent(); // TextEditor: Current Content: Like and
         editor.write("Like and do");
-        editor.undo();
-        editor.write("Like and Subscribe");
+        editor.showContent(); // TextEditor: Current Content: Like and do
+        editor.undo(); // Undoing to previous state...
+        // Retrieved text from memento is: Like and
+        editor.showContent(); // TextEditor: Current Content: Like and
     }
 }
 ``` 
