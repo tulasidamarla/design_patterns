@@ -144,3 +144,14 @@ public static void main(String[] args) {
 - Here is the UML class diagram for the bridge composite design pattern.
 
 <img src="../../images/composite.png" height=400 width=500>
+
+- Components of the composite design pattern as per the above UML are below.
+  - `Component:` The component interface(box) describes operations that are common to both simple and complex objects of the tree.
+  - `Leaf and Composite:` Leaf are various products in our example and Composite is the CompositeBox. 
+    - Usually, Leafs does the actual work since they can't delegate the work to anything else.
+    - Composite has sub elements and doesn't know anything about the concrete classes of its children.
+  - `Client:` Client works the same way with both the complex and simple object of the tree via common interface.
+- `Advantages`
+  - This pattern promotes open/closed principle because new element types(products) can be introduced without breaking the existing 
+    code.
+    

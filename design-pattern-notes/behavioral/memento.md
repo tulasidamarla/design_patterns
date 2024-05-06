@@ -60,10 +60,6 @@
 - Memento design pattern delegates creating the state snapshots to the actual owner of the state, instead of other objects trying to 
   copy the initial object's state from outside the class.
 - The original class itself can make the snapshot since it has full access to its own state.
-- Here is the UML class diagram.
-
-<img src="../../images/memento.png" height=300 width=500>
-
 - Here is the implementation of this approach, using inner memento(or snapshot class). 
 
 ```java
@@ -101,8 +97,6 @@ class TextArea{
 ```
 - `Note:` The memento class has same fields as that of the original class(TextArea) along with getter to retrieve the snapshot that is 
   only accessible from outer class.
-- Memento class is a value object that acts as a snapshot of the original class.
-  - It is a common practice to make Memento immutable and pass data only once through constructor.
 - Let's implement the text editor which stores and retrieves the snapshots.
 ```java
 class TextEditor {
@@ -147,3 +141,21 @@ class Test{
     }
 }
 ```
+
+- Here is the UML class diagram.
+
+<img src="../../images/memento.png" height=300 width=500>
+
+- `Components`
+  - `Originator:` This is the `TextArea` class in the above example. 
+    - This class can produce snapshots of its own class as well as restoring from snapshot when needed.
+  - `Memento:` It's a value object acts as a snapshot of the `Originator` state.
+    - It is a common practice to make memento immutable and pass data only once through constructor.
+  - `CareTaker:` It is the `TextEditor` in the above example.
+    - This class knows, when and why to capture originator's state and also responsible for restoring the orignator's state.
+    - It keeps track of `Originators` history by storing list of mementos.   
+- `Advantages`
+  - This pattern makes full copies of an object's state including private fields and stores them in a seperate object.
+  - This pattern delegates the creation of object's snapshot to the object itself. This makes the data safe as no other object can 
+    read or access the snapshot data.
+
