@@ -1,5 +1,5 @@
 # Design_patterns
-- Design patterns are are reusable solutions to common problems encountered during software design.
+- Design patterns are reusable solutions to common problems encountered during software design.
 - Characteristics of design patterns are as follows.
   - `Proven Solutions:` These are known approaches that have been successfully used in various projects, so time and effort can be saved.
   - `Flexibility:` These can be adapted and customized to fit the specific context of your project.
