@@ -28,8 +28,7 @@
     - Client composes the chain of handlers.
     - This can be done once or dynamically depending on the application's business logic.
     - The request that client composes can be sent to any handler in the chain, not necessarily the first handler.
-
-- `UML Class diagram`
+- Here is the UML class diagram.
 
 <img src="../../images/chain_of_responsibility.png" height=400 width=400>  
 
@@ -40,6 +39,7 @@
     - Validate username to verify if user exists, Validate password and Validate permissions or roles to access something.
     - If not valid, the app has to redirect the user to sign-in again.
 - Here is the sample code.
+  
 ```java
 //Base handler or interface
 abstract class BaseHandler{
