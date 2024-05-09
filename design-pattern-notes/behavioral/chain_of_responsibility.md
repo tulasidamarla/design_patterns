@@ -1,4 +1,5 @@
 # Chain of responsibility
+
 - The Chain of responsibility pattern transform particular behaviors into stand alone objects called handlers.
 - The Chain of Responsibility allows an object to pass a request along a chain of handlers. 
 - Each handler in the chain has the opportunity to process the request(optionally can pass to next handler) or pass it on to the next 
