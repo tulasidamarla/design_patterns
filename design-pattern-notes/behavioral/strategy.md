@@ -171,7 +171,7 @@ public static void main(String[] args) {
 ```
 - `Note:` PaymentService class has no visibility on how the payment is conducted as it is making use of the strategy interface.
   Also, We can modify existing alogrithms and add new algorithms.
-- Here is the UML class diagram of strategy desing pattern.
+- Here is the UML class diagram of strategy design pattern.
 
 <img src="../../images/strategy.png" height=400 width=600>
 
