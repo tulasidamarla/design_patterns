@@ -1,23 +1,21 @@
 package com.learning.designpatterns.behavioral.strategy;
 
+import com.learning.designpatterns.behavioral.strategy.strategy.PaymentByCreditCard;
+import com.learning.designpatterns.behavioral.strategy.strategy.PaymentByPayPal;
+
 public class Test {
     public static void main(String[] args) {
-      Door c;
-  
-      c = new ClosetDoor();
-      c.setOpenBehavior(new Standard());
-      c.setLockBehavior(new NonLocking());
-  
-      c.performOpen();
-      c.performClose();
-  
-      c.performLock();
-      c.performUnlock();
-  
-      // upgrade the door to a password protected door
-      c.setLockBehavior(new Password());
-      c.performLock();
-      c.performUnlock();
+
+        PaymentService paymentService = new PaymentService();
+        // The strategy can now be easily picked at runtime
+
+        paymentService.setStrategy(new PaymentByCreditCard());
+        paymentService.processOrder(100);
+
+        System.out.println("==========================================");
+
+        paymentService.setStrategy(new PaymentByPayPal());
+        paymentService.processOrder(100);
+
     }
-  }
-  
+}

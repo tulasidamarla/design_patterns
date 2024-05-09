@@ -1,247 +1,227 @@
 # Strategy design pattern
-
-- The Strategy is a behavioural pattern that is used to define a family of algorithms that can be choosen at runtime.
-- The client code can change the behavior of a given context at runtime, allowing for greater flexibility.
-
-## Motivation
-- Imagine that we are programming behavior for a house. 
-- Houses can have all kinds of doors for ex, external doors, safe deposit doors, closet doors, sliding doors etc.
-- All these doors share common attributes and behaviors. For ex, every door has some kind of locking and unlocking mechanism even if the 
-  exact functionality might differ.
-- One possible solution is to use inheritance. For ex, If Door is our base class, we can just extend our base functionality in our 
-  specialized door classes. This is not a bad strategy to begin with, as we can reuse what we need and add new functionality as needed.
-- Now let's say that we decide that different doors can be opened different types of ways.
-  - For example, sliding doors will slide open and close, closet doors can also slide open and close. External doors can be revolving.
-- In addition, each door can be made out of a different material, and have different colors.
 - `Problem`
-  - If most subclasses have to override many of Door's methods, then having a Door superclass don't benefit much. The class Door does not  
-    tell us much about doors because all of the doors have significantly different implementation.
-  - Even if we have a separate subclass for every type of Door, we are starting to lose the benefit of inheritance.
-  - Also, each time we want to add a new feature, a change in Door may affect all the classes in the inheritance hierarchy resulting in 
-    tight coupling.  
-  - Flexibility is also lost. For ex, to create a custom safe deposit door, which locks using a keycard, made out of titanium, and has no 
-    windows, we need a class `SafeDepositDoorKeyCardTitaniumNoWindows`, because the behavior of our given Door type is decided at compile time. We can't change this Door to be password protected at runtime.
-- `Solution1`
-  - Create `Lockable` interface and implement lock() and unlock() in sub-classes. 
-  - This approach doesn't allow code reuse.
-  - Imagine if there are twenty different implementation and if there is a consistent change required, then every sub-class need to be 
-    modified.
-- `Solution2`
-  - The strategy design pattern "Encapsulate What Varies".
-  - THis design identifies parts of the applications that vary and separate them from what stays constant.
-  - Alter lock() and unlock() code every time for a new type of Door. So, we can implement and extend this behavior however we like, 
-    without affecting the rest of the application.
-  - `Identifying`
-    - `Varying`
-      - Door opening and closing behavior
-      - Door locking and unlocking
-    - `Constant`
-      - size and dimensions. so, we can keep this in Door class.
-  - By delegating these varying behaviors using the Strategy pattern, our main Door class does not need to worry about the 
-    specifics.        
+  - Let's implement payment service to understand the need for strategy design pattern.
 
-## Components
-- `Context (Navigator Class)`
-  - Instead of determining behavior directly or through a series of conditions, delegate the responsibility to the strategy it is provided.
-  - This allows the Context to change its behavior dynamically by swapping out its strategy.
-- `Strategy Interface`
-  - The blueprint that ensures consistency across all strategies. We have two strategies Openable with open/close methods and a Lockable 
-    strategy with lock/unlock methods.
-- `Concrete Strategies`
-  - These classes implement the strategy interface, defining the specific behavior or algorithm.
-  - The client will choose which concrete strategy to use and pass it to the context.
-- `Client`
-  - The Client interacts with the Context and decides which Concrete Strategy to use.
-  - It's the Client's responsibility to create strategy objects and pass them to the Context.
-  - The Client can change the strategy dynamically based on certain conditions or preferences without needing to modify the Context or 
-    Strategy classes themselves.
-- The UML class diagram below demonstrates the strategy design pattern.
-
-<img src="../../images/strategy.avif" height=300 width=400>
-
-- The java code below demonstrates classic strategy design pattern.
 ```java
-interface Lockable {
-  void lock();
-  void unlock();
-}
+class PaymentService{
+    private int cost;
+    private boolean includeDelivery;
 
-class NonLocking implements Lockable {
+    public void processPayment(String paymentMethod){
+        CreditCard card = new CreditCard("cardNumber", "expiryDate", "cvv");
+        System.out.println("Paying " + getTotal() + " using credit card");
+        // process payment code goes here
+    }
 
-  public void lock() {
-    System.out.println("Door does not lock - ignoring");
-  }
-
-  public void unlock() {
-    System.out.println("Door cannot unlock because it cannot lock");
-  }
-}
-
-class Password implements Lockable {
-
-  public void lock() {
-    System.out.print("Door locked using password!");
-  }
-
-  public void unlock() {
-    System.out.print("Door unlocked using password!");
-  }
-}
-
-class KeyCard implements Lockable {
-
-  public void lock() {
-    // ...
-  }
-
-  public void unlock() {
-    //...
-  }
-}
-
-interface Openable {
-  void open();
-  void close();
-}
-
-class Standard implements Openable {
-
-  public void open() {
-    System.out.println("Pushing door open");
-  }
-
-  public void close() {
-    System.out.println("Pulling door closed");
-  }
-}
-
-class Revolving implements Openable {
-
-  public void open() {
-    //..
-  }
-
-  public void close() {
-    //..
-  }
-}
-class Sliding implements Openable {
-
-  public void open() {
-    //..
-  }
-
-  public void close() {
-    //..
-  }
-}
-
-abstract class Door {
-
-  private Lockable lockBehavior;
-  private Openable openBehavior;
-
-  public void setLockBehavior(Lockable l) {
-    this.lockBehavior = l;
-  }
-
-  public void setOpenBehavior(Openable o) {
-    this.openBehavior = o;
-  }
-
-  public void performLock() {
-    lockBehavior.lock();
-  }
-
-  public void performUnlock() {
-    lockBehavior.unlock();
-  }
-
-  public void performOpen() {
-    openBehavior.open();
-  }
-
-  public void performClose() {
-    openBehavior.close();
-  }
-
-  public float getDimensions() {
-    return 5;
-  }
-}
-
-class ClosetDoor extends Door {
-  //...
-}
-
-class ExternalDoor extends Door {
-  //...
-}
-
-class SafeDepositDoor extends Door {
-  //...
-}
-
-class SlidingDoor extends Door {
-  //...
-}
-
-class Main {
-  static void main(String[] args) {
-    Door c;
-
-    c = new ClosetDoor();
-    c.setOpenBehavior(new Standard());
-    c.setLockBehavior(new NonLocking());
-
-    c.performOpen();
-    c.performClose();
-
-    c.performLock();
-    c.performUnlock();
-
-    // upgrade the door to a password protected door
-    c.setLockBehavior(new Password());
-    c.performLock();
-    c.performUnlock();
-  }
+    private int getTotal(){
+        return includeDelivery ? cost + 10: cost;
+    }
 }
 ```
-# Alternate solutions
-- A common alternative to the strategy pattern is to simply pass in an inline / lambda function, which allows us to extend the behavior of 
-  a method or class.
-- Difference b/w classic strategy and Lambda functions.
-  - Both the Strategy Pattern and passing lambda functions can be used to achieve similar goals, but they differ in their approach and 
-    usage.
-  - `How they work`  
-    - `Strategy`
-      - The Strategy Pattern is a design pattern that defines a family of algorithms, encapsulates each algorithm as an object (strategy), 
-        and makes them interchangeable.
-      - It typically involves creating a hierarchy of strategy interfaces or abstract classes, each representing a different algorithm, and 
-        providing concrete implementations for each strategy.
-      - The client explicitly selects and injects the desired strategy object into the context or invoker. This allows the client to switch 
-        between different strategies at runtime.
-      - The Strategy Pattern promotes code reusability and maintainability by encapsulating algorithms in separate classes, making it 
-        easier to add new strategies or modify existing ones without modifying the client code.  
-    - `Lambdas`
-      - These are anonymous functions that can be used to implement functional interfaces, such as Runnable, Comparator, or custom 
-        functional interfaces.
-      - They provide a concise and inline way to define behavior without the need to create separate classes for each algorithm.
-      - This can lead to more compact and readable code, especially for short and simple algorithms.
-      - They reduce the amount of boilerplate code required for defining and using strategies.
-      - They eliminate the need to create explicit strategy classes, interfaces, and implementations.
-  - `Differences`
-    - `Flexibility:`
-      - The Strategy Pattern offers more flexibility and extensibility, as it allows for a clear separation between the context/invoker and 
-        the strategies.
-      - Lambda expressions offer flexibility, they are often used for simpler scenarios where strategies are shortlived or straightforward.
-    - `Abstraction Level:`
-      - The Strategy Pattern works at a higher level of abstraction, with explicit strategy interfaces or classes representing algorithms.
-      - The Lambda functions operates at a lower level of abstraction, directly manipulating behavior through anonymous functions.
-    - `Readability and Maintainability:`
-      - The Strategy Pattern, with its explicit classes and interfaces, provides a more structured and self-documenting approach to 
-        managing algorithms.
-      - Excessive use of lambda expressions without proper context or documentation may reduce code readability and maintainability.
+  - If we want to add more payment methods like paypal, we need to wrap the above code with if else conditions as shown below.
+```java
+class PaymentService{
+    private int cost;
+    private boolean includeDelivery;
+
+    public void processPayment(String paymentMethod){
+        if("CreditCard".equals(paymentMethod)){
+            CreditCard card = new CreditCard("cardNumber", "expiryDate", "cvv");
+            // validate credit card
+            System.out.println("Paying " + getTotal() + " using credit card");
+            // process payment code goes here
+        } else if("CreditCard".equals(paymentMethod)){
+            String email = "...";
+            String password = "....";
+            // validate account
+            System.out.println("Paying " + getTotal() + " using paypal");
+            // process payment code goes here
+        }
+    }
+
+    private int getTotal(){
+        return includeDelivery ? cost + 10: cost;
+    }
+}
+```
+- The above approach has the following problems.
+  - Single responsibility principle violation(Handling many types of payment)
+  - Open/closed principle violation(Need to modify the existing code if more types of payments are added in the future).
+- `Solution`
+  - To fix the above problem we need strategy design pattern.
+    - The strategy design pattern palces each payment method in its own class and making responsible for that payment strategy.
+    - These classes are easily replaceable by one another.
+- `Definition`
+  - Strategy design pattern defines a family of algorithms, puts each of them in a seperate class, and makes their objects 
+    interchangeable.
+    - To make the objects interchangeable, extract the common behaviors(like collectPaymentDetails, validate, pay etc) to an interface.
+  - Let's implement the strategy design pattern for the above payment service.
+```java
+interface PaymentStrategy {
+
+    void collectPaymentDetails();
+
+    boolean validatePaymentDetails();
+
+    void pay(int amount);
+
+}
+
+class PaymentByCreditCard implements PaymentStrategy {
+
+    private CreditCard card;
+
+    @Override
+    public void collectPaymentDetails() {
+        // Pop-up to collect card details...
+        card = new CreditCard("cardNumber", "expiryDate", "cvv");
+        System.out.println("Collecting Card Details...");
+    }
+
+    @Override
+    public boolean validatePaymentDetails() {
+        // Validate credit card...
+        System.out.println("Validating Card Info: " + card);
+        return true;
+    }
+
+    @Override
+    public void pay(int amount) {
+        System.out.println("Paying " + amount + " using Credit Card");
+        card.setAmount(card.getAmount() - amount);
+    }
+
+}
+
+class PaymentByPayPal implements PaymentStrategy {
+
+    private String email;
+    private String password;
+
+    @Override
+    public void collectPaymentDetails() {
+        // Pop-up to collect PayPal mail and password...
+        email = "PayPal Mail";
+        password = "PayPal Password";
+        System.out.println("Collecting PayPal Account Details...");
+    }
+
+    @Override
+    public boolean validatePaymentDetails() {
+        // Validate account...
+        System.out.printf("Validating PayPal Info: %s | %s%n", email, password);
+        return true;
+    }
+
+    @Override
+    public void pay(int amount) {
+        System.out.println("Paying " + amount + " using PayPal");
+    }
+
+}
+
+class CreditCard {
+    private int amount = 1_000;
+    private final String number;
+    private final String date;
+    private final String cvv;
+
+
+    public CreditCard(String number, String date, String cvv) {
+        this.number = number;
+        this.date = date;
+        this.cvv = cvv;
+    }
+    //setters and getters are omitted for breivity
+}
+
+class PaymentService {
+    private int cost;
+    private boolean includeDelivery = true;
+
+    private PaymentStrategy strategy;
+
+    public void processOrder(int cost) {
+        this.cost = cost;
+        strategy.collectPaymentDetails();
+        if (strategy.validatePaymentDetails()) {
+            strategy.pay(getTotal());
+        }
+    }
+
+    private int getTotal() {
+        return includeDelivery ? cost + 10 : cost;
+    }
+
+    public void setStrategy(PaymentStrategy strategy) {
+        this.strategy = strategy;
+    }
+}
+
+//Test code
+public static void main(String[] args) {
+        PaymentService paymentService = new PaymentService();
+        // The strategy can now be easily picked at runtime
+        paymentService.setStrategy(new PaymentByCreditCard());
+        paymentService.processOrder(100);
+        System.out.println("==========================================");
+        paymentService.setStrategy(new PaymentByPayPal());
+        paymentService.processOrder(100);
+}
+```
+- `Note:` PaymentService class has no visibility on how the payment is conducted as it is making use of the strategy interface.
+  Also, We can modify existing alogrithms and add new algorithms.
+- Here is the UML class diagram of strategy desing pattern.
+
+<img src="../../images/strategy.png" height=400 width=600>
+
+- `Components`
+  - `Context`
+    - It maintains reference to one of the concrete strategies and communicates through that only via interface.
+      - In out example, PaymentService class is the context which maintains reference to PaymentStrategy.
+  - `Concrete Strategies`
+    - These classes implement the specific type of strategy.
+    - The context doesn't know how these concrete strategies are implemented.
+    - In our example, PaymentByCreditCard, PaymentByPaypal represents concrete strategies.
+  - `Client`
+    - Client should create a specific type of strategy and pass it to context via setter method allowing clients to replace the 
+      strategy during runtime.
+
+## State vs Strategy
+
+- Similarities
+  - We can consider State is an extension of Strategy as both patterns are based on composition.
+  - Both change the behavior of the context by delegating some work to helper objects.
+- Differences
+  - Though both change the behavior of the context, Concrete strategies are independent and unaware of each other, where as States are 
+    dependent and can jump from one state to other.
+  - Strategy pattern has multiple strategy implementations, but they all achieve same behavior. For ex, Differnt sorting strategies 
+    achieve sorting behavior only, whereas State pattern is all about different behaviors depending on state.
+
+## Strategy vs Java lambdas
+
+- `Lambdas`
+  - These are anonymous functions that can be used to implement functional interfaces, such as Runnable, Comparator, or custom 
+    functional interfaces.
+  - They provide a concise and inline way to define behavior without the need to create separate classes for each algorithm.
+  - This can lead to more compact and readable code, especially for short and simple algorithms.
+  - They reduce the amount of boilerplate code required for defining and using strategies.
+  - They eliminate the need to create explicit strategy classes, interfaces, and implementations.
+
+- `Differences`
+  - `Flexibility:`
+    - The Strategy Pattern offers more flexibility and extensibility, as it allows for a clear separation between the context/
+      invoker and the strategies.
+    - Lambda expressions offer flexibility, they are often used for simpler scenarios where strategies are shortlived or 
+      straightforward.
+  - `Abstraction Level:`
+    - The Strategy Pattern works at a higher level of abstraction, with explicit strategy interfaces or classes representing 
+      algorithms.
+    - The Lambda functions operates at a lower level of abstraction, directly manipulating behavior through anonymous functions.
+  - `Readability and Maintainability:`
+    - The Strategy Pattern, with its explicit classes and interfaces, provides a more structured and self-documenting approach to 
+      managing algorithms.
+    - Excessive use of lambda expressions without proper context or documentation may reduce code readability and maintainability.
 
 ## Limitations and Pitfalls
 - When a class has a behavior that can be realized in multiple ways, the use of the strategy pattern is a good candidate solution.
@@ -259,7 +239,9 @@ class Main {
   or the fastest route. Each of these routes have different strategies.
 - `Shipping Options` - Each shipping method has its own category and its own strategy for determining cost and delivery time.  
 
-## Assignment
+# Assignment
+
+- The below is an example of strategy which uses different filtering strategies like adult, married and senior citizen etc.
 
 ```java
 class Person {
