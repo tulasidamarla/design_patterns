@@ -142,8 +142,6 @@ public class Test {
     }
 }
 
-
-
 ```
 - `Benefits:`
   - `Decoupled Request Handling:` Objects don't need to know the exact handler responsible for their request. They simply send it to the first handler in the chain.
