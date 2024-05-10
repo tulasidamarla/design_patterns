@@ -7,7 +7,6 @@
     - state1: When the phone is locked and display not on, pressing the power button turn the display on.
     - state2: when the phone display is on and locked, pressing the power button will unlock the phone.
     - state3: when the phone is unlocked, pressing the power button will lock the phone.
-    - state4: when the phone is on, pressing home and power button will power off the phone.
 - At any given moment there are finite no of states. In every unique state, the program behaves differently.
 - A state can switch the program to another one state or not switch at all.
 - The switching rules(transitions) are predetermined and finite.

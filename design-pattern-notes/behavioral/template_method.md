@@ -119,4 +119,18 @@ public class Main {
       to customize the creation of prepared statements, the processing of result sets.
     - We effectively provide concrete implementations of callback interfaces when you use methods like query(), update(), executeQuery().
     - These callbacks are invoked by the execute() method of JdbcTemplate, which orchestrates the overall database operation process.
+
+```java
+  // Example query
+  String sql = "SELECT * FROM users WHERE age > ?";
+  
+  // Execute query using JdbcTemplate
+  jdbcTemplate.query(sql, new Object[]{18}, (rs, rowNum) -> {
+      // Process each row of the result set
+      String name = rs.getString("name");
+      int age = rs.getInt("age");
+      System.out.println("Name: " + name + ", Age: " + age);
+      return null;
+  });
+``` 
     
