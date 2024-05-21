@@ -1,5 +1,5 @@
 # Adapter design pattern
-- The Adapter Design Pattern is used to allow two `incompatible interfaces` to work together.
+- The Adapter Design Pattern allows two `incompatible interfaces` to work together.
 - It acts as a bridge between the two interfaces.
 - It translates requests from one interface into a format that the other interface can understand.
 - Consider the below example.
