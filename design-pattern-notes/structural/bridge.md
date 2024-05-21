@@ -132,8 +132,7 @@ abstract class Restaurant {
         makeCrust();
         addSauce();
         addToppings();
-        pizza.assemble();
-        pizza.qualityCheck();
+        pizza.prepare();
         System.out.println("Order in Progress!");
     }
 }
