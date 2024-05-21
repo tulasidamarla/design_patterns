@@ -1,64 +1,87 @@
 # Adapter design pattern
-- The Adapter Design Pattern allows two `incompatible interfaces` to work together.
-- It acts as a bridge between the two interfaces.
-- It translates requests from one interface into a format that the other interface can understand.
-- Consider the below example.
-  - A web application which fetches weather based on zipcode.
-  - The backend of the application relies on WeatherFinder service which takes `city` as input and returns weather.
-  - We need an adapter which takes input of zipcode and converts into `city` and fetches information from WeatherFinder.
-- Here is the code for the same.
+
+- The adapter design pattern is a strcutural design-pattern that allows objects with incompatible interfaces to collaborate with one 
+  another.
+- `Usecase`
+  - A food delivery app like zomato which collects menu of several restaurants and combine them into a single delivery platform.
+  - This app collects data from multiple sources in xml format and using them to display menus and recommondations in the UI.
+  - The app requires an upgrade to the UI and there is a thrid party library that has all fancy ui components but it works only with 
+    json data.
+- `Problem`
+  - The third party library code may not be available and unable to change the source code.
+- `Solution`
+  - The adapater design pattern provides solution to the problem.
+  - The adapter takes xml data and transforms to json.
 ```java
-public interface WeatherFinder {
-	int find(String city);
+interface IDevelieryApp{
+    void displayMenus(XMLData xmlData);
+    void displayRecommondations(XMLData xmlData);
 }
 
-public class WeatherFinderImpl implements WeatherFinder {
-	@Override
-	public int find(String city) {
-		return 33;
-	}
+class DevelieryApp extends IDevelieryApp{
+    @Override
+    void displayMenus(XMLData xmlData){
+        // display menus using xml data
+    }
+
+    @Override
+    void displayRecommondations(XMLData xmlData){
+        // display recommondations using xml data
+    }
 }
 
-public class WeatherAdapter {
-	public int findTemperature(int zipCode) {
-		String city = null;
-		if (zipCode == 19406) {
-			city = "King Of Prussia";
-		}
-		WeatherFinder finder = new WeatherFinderImpl();
-		int temperature = finder.find(city);
-		return temperature;
-	}
-}
+// Third party library
+class FancyUIService{
+    void displayMenus(Jsondata jsondata){
+        // display menus using json data
+    }
 
-public class WeatherUI {
-	public void showTemperature(int zipcode) {
-		WeatherAdapter adapter = new WeatherAdapter();
-		System.out.println(adapter.findTemperature(zipcode));
-
-	}
-
-	public static void main(String[] args) {
-		WeatherUI ui = new WeatherUI();
-		ui.showTemperature(19406);
-	}
+    void displayRecommondations(Jsondata jsondata){
+        // display recommondations using json data
+    }
 }
 ```
-- Here is the UML class diagram for the above code.
+- To transform xml data to json data we need an adapter.
+- This adapter uses both inheritance(or realization) and composition.
+- The adapater implements the IDeliveryApp interface and wraps the FancyUIService class.
+```java
+class FancyUIServiceAdapter implements IDevelieryApp{
+    private final FancyUIService fancyUIService;
+    FancyUIServiceAdapter(){
+        fancyUIService = new FancyUIService();
+    }
 
-<img src="../../images/adapter.png" height=300 width=400>
+    @Override
+    void displayMenus(XMLData xmlData){
+        JsonData jsonData = convertXMLToJson(xmlData);
+        fancyUIService.displayMenus(jsonData);
+    }
 
-- Other examples.
-  - `RestTemplate:` rest template acts as an adapter between spring and httpclient implementation.
-    - It provides a high-level API for making HTTP request such as getForEntity(), postForEntity(), marshalling/unmarshalling.
-  - `Arrays.asList()`
-    - This utility method acts as an adapter between the array and List interface. It wraps the array into a List.
-      - `Note:` This returns an immutable list, meaning you can't invoke some methods like add(), remove() etc.
-  
-- `Note:`
-  - The Adapter pattern does not necessarily require the adapter to return the interface type of the adaptee to the caller.
-  - The purpose of the Adapter pattern is to allow objects with incompatible interfaces to work together. 
-  - How the adapter interacts with the adaptee and what it returns to the caller depends on the specific requirements and design of the 
-    system.
-  - For ex, in the WeatherAdapter example, it returns an integer representing the temperature, which is the result of calling the 
-    findTemperature() method.
+    @Override
+    void displayRecommondations(XMLData xmlData){
+        JsonData jsonData = convertXMLToJson(xmlData);
+        fancyUIService.displayRecommondations(jsonData);
+    }
+}
+
+// Client code
+IDevelieryApp deliveryApp = new DevelieryApp();
+deliveryApp.displayMenus(new XmlData());
+
+FancyUIServiceAdapter adapter = new FancyUIServiceAdapter();
+adapter.displayMenus(new XmlData());
+```
+- Here is the UML class diagram of adapter design pattern.
+
+<img src="../../images/adapter.png" height=300 width=500>
+
+- `Client`
+  - The client contains the business logic of the app.
+- `ClientInterface`
+  - It contains methods to be implemented by that other classes and adapter.  
+- `Service`
+  - It is some legacy or third-party code that client can't use directly because it has some incompatible interface.
+- `Adapter`
+  - It contains the logic and can be able to work with both client and legacy code.
+  - It implements the Client interface.
+      
