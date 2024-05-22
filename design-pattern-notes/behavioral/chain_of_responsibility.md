@@ -26,7 +26,7 @@
     - Chaining next handler logic usually present inside the concrete handlers.
     - Sometimes, Handlers also contain an additional method for assigning next handler. This scenario occurs when client wants to 
         create a pipeline(chaining of handlers) by themselves.
-    - `Base Handler`
+  - `Base Handler`
     - If there is any boiler plate code that is common for all handlers, that can be written in this base handler abstract class.
   - `Client`
     - Client composes the chain of handlers.
