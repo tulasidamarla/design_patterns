@@ -5,7 +5,11 @@
 - Each handler in the chain has the opportunity to process the request(optionally can pass to next handler) or pass it on to the next 
   handler in the chain.
 - This pattern decouples the sender of a request from its receiver.
-- `Components`
+- Here is the UML class diagram.
+
+<img src="../../images/chain_of_responsibility.png" height=400 width=400>  
+
+- `Components of the diagram`
   - `Handler:` This is the base interface (or abstract class) that defines the operation (handle) for processing a request. 
   - `Concrete Handler:` These classes extend the Handler interface and implement the handle method with their specific processing 
     logic.
@@ -22,15 +26,12 @@
     - Chaining next handler logic usually present inside the concrete handlers.
     - Sometimes, Handlers also contain an additional method for assigning next handler. This scenario occurs when client wants to 
         create a pipeline(chaining of handlers) by themselves.
-    - `Base Handler`
+  - `Base Handler`
     - If there is any boiler plate code that is common for all handlers, that can be written in this base handler abstract class.
   - `Client`
     - Client composes the chain of handlers.
     - This can be done once or dynamically depending on the application's business logic.
     - The request that client composes can be sent to any handler in the chain, not necessarily the first handler.
-- Here is the UML class diagram.
-
-<img src="../../images/chain_of_responsibility.png" height=400 width=400>  
 
 - `Example`
   - Let's take a scenario of Customer care center request. The process starts with an ivr(robot), followed by a general executive and 
