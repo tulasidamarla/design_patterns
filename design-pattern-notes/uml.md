@@ -32,7 +32,7 @@
 - class notation is a graphical representation used to depict classes and their relationships in 
   object-oriented modeling.
 
-<img src="./images/class_diagram.png" height=300 width=400>
+<img src="../images/uml_images/images/class_diagram.png" height=300 width=400>
 
 - `Class Name:` The name of the class is typically written in the top compartment of the class box and is centered and bold. If abstract class, the name is in italic.
 - `Attributes:` These represent the data members of the class. These often include the visibility and data type of each attribute.
@@ -53,7 +53,7 @@
 ### Relationships between classes
 - Relationship between classes define how classes are connected and interact with each other within a system. There are several types of relationships in object-oriented modeling, each serving a specific purpose.
 
-<img src="./images/relations.png" height=300 width=400>
+<img src="../images/uml_images/images/relations.png" height=300 width=400>
 
 #### Association
 - An association represents a bi-directional relationship between two classes.
@@ -63,7 +63,7 @@
 - In an association, both classes are considered equal, and neither class owns the other. Objects of each class can exist 
   independently of each other.  
 
-<img src="./images/association.png" height=300 width=400>
+<img src="../images/uml_images/images/association.png" height=300 width=400>
 
 #### Directed Association
 - It represents a relationship between two classes where the association has a direction, indicating that one class is 
@@ -71,7 +71,7 @@
 - Consider a scenario where a `Teacher` class is associated with a `Course` class in a university system.
 - `Note:` A `Course` is not associated to a `Teacher`.
 
-<img src="./images/directed_association.png" height=300 width=400>
+<img src="../images/uml_images/images/directed_association.png" height=300 width=400>
 
 #### Aggregation
 - Aggregation is a special form of association where one class (the whole or aggregate) contains or owns objects of another 
@@ -79,7 +79,7 @@
 - Aggregation implies a "whole-part" relationship, where the part can exist independently of the whole.
 - Aggregation is represented by a diamond shape on the side of the whole class.
 
-<img src="./images/aggregation.png" height=300 width=400>
+<img src="../images/uml_images/images/aggregation.png" height=300 width=400>
 
 #### Composition
 - Composition is a stronger form of aggregation, indicating a more significant ownership or dependency relationship.
@@ -90,7 +90,7 @@
   - Each contact entry is fully owned and managed by the contact book.
   - If the contact book is deleted or destroyed, all associated contact entries are also removed.
 
-<img src="./images/composition.png" height=300 width=400>
+<img src="../images/uml_images/images/composition.png" height=300 width=400>
 
 #### Generalization(Inheritance)
 - Inheritance represents an `is-a` relationship between classes.
@@ -98,7 +98,7 @@
 - In the example of bank accounts, we can use generalization to represent different types of accounts such as current 
   accounts, savings accounts, and credit accounts.
 
-<img src="./images/generalization.png" height=300 width=400>
+<img src="../images/uml_images/images/generalization.png" height=300 width=400>
 
 #### Realization(Interface Implementation)
 - Realization indicates that a class implements the features of an interface.
@@ -112,7 +112,7 @@
   - `Corporation Class (Realization):` Similarly, the Corporation class also implements the Owner interface, offering specific 
     implementations for the “acquire(property)” and “dispose(property)” methods. For example, a corporation can acquire ownership of real estate properties or dispose of company vehicles.
 
-<img src="./images/realization.png" height=300 width=400>
+<img src="../images/uml_images/images/realization.png" height=300 width=400>
 
 #### Dependency
 - A dependency exists between two classes when one class relies on another, but the relationship is not as strong as association or inheritance.
@@ -123,7 +123,7 @@
   - `Book Class:` The Book class is independent and can exist without the Person class.
 - Dependency is the weakest form of relationship, and it does not imply any ownership or direct association between classes.
 
-<img src="./images/dependency.png" height=300 width=400>
+<img src="../images/uml_images/images/dependency.png" height=300 width=400>
 
 #### Usage(Dependency)
 - Usage represents a stronger form of dependency where one class utilizes the services or functionality provided by another 
@@ -214,7 +214,7 @@ public class Engine {
   - `Composition:` A teacher belongs to a class. A Teacher cannot exist(or teach) without a Class.
     - Multiplicity is `1..*` because a Teacher can teach multiple classes.
     
-<img src="./images/multiplicity.png" height=300 width=400>
+<img src="../images/uml_images/images/multiplicity.png" height=300 width=400>
 
 ## Sequence diagrams
 - `Sequence Diagram:` Sequence diagrams depict the interactions between objects or components in a system 
@@ -245,14 +245,14 @@ public class Engine {
   - If validation is successul, then ATM instructs user to enter pin.(solid line because it is an instruction 
     not response).
 
-<img src="./images/seq_diagram_1.jpg" height=300 width=400>
+<img src="../images/uml_images/images/seq_diagram_1.jpg" height=300 width=400>
 
 - To represent if/else condition sequences, alternative frames are used. 
   - For ex:
     - If card is valid, then instruct user to enter pin.
     - If card is not valid, send error message and eject card.
 
-<img src="./images/seq_diagram_2.jpg" height=300 width=400>
+<img src="../images/uml_images/images/seq_diagram_2.jpg" height=300 width=400>
 
 ### Activation boxes
 
@@ -260,4 +260,4 @@ public class Engine {
   - It shows when objects are active and idle.
 - For ex, lets take a transaction of withdrawing money from ATM.
   - The green vertical lines represent activation boxes.
-  <img src="./images/seq_diagram_3.jpg" height=300 width=400>
+  <img src="../images/uml_images/images/seq_diagram_3.jpg" height=300 width=400>
