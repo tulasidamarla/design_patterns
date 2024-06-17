@@ -102,7 +102,7 @@
 
 #### Realization(Interface Implementation)
 - Realization indicates that a class implements the features of an interface.
-- Realization is depicted by a dashed line with an closed, hollow arrowhead pointing from the implementing class to the 
+- Realization is depicted by a dashed line with a closed, hollow arrowhead pointing from the implementing class to the 
   interface.
 - Let’s consider the scenario where a “Person” and a “Corporation” both realizing an “Owner” interface.
   - `Owner Interface:` This interface now includes methods such as “acquire(property)” and “dispose(property)” to represent 
