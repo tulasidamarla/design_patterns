@@ -1,6 +1,6 @@
 # Visitor design pattern
 
-- The visitor design pattern adds new functionalities to a group of objects without modifying their classes. 
+- The visitor design pattern adds new functionality to a group of objects without modifying their classes. 
 - It achieves this by introducing a separate visitor object that traverses the object structure and performs operations on each object 
   based on its type.
 - `Components involved`
