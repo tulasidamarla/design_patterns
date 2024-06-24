@@ -3,7 +3,7 @@
 - The state design pattern allows an object to change its behavior when its internal state changes.
 - Let's take an example of a mobile device to explain this.
   - A mobile power button and home button.
-  - The actions the power button perform vary based on the condition(state) in which the phone is in.
+  - The actions the power button perform vary based on the current state of the phone.
     - state1: When the phone is locked and display not on, pressing the power button turn the display on.
     - state2: when the phone display is on and locked, pressing the power button will unlock the phone.
     - state3: when the phone is unlocked, pressing the power button will lock the phone.
