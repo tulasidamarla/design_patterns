@@ -353,7 +353,7 @@ class TrafficLight {
   }
 
   void setState(TrafficLightState state) {
-    this.prevState = this.state;
+    this.prevState = prevState;
     this.state = state;
   }
 
